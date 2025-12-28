@@ -1,14 +1,16 @@
-// lib/data/providers/database_provider.dart
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
 import '../local/database_helper.dart';
 
 final databaseProvider = Provider<DatabaseHelper>((ref) {
   return DatabaseHelper();
 });
 
-final medicinesProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
+final medicinesProvider = FutureProvider<List<MedicineModel>>((ref) async {
   final db = ref.read(databaseProvider);
-  return await db.getMedicines();
+  return await db.getAllMedicines();
 });
 
 final cartProvider = StateNotifierProvider<CartNotifier, List<Map<String, dynamic>>>((ref) {
@@ -35,4 +37,17 @@ class CartNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     await _db.clearCart();
     state = [];
   }
+
+  final searchMedicinesProvider = FutureProvider.family<List<MedicineModel>, String>((ref, query) async {
+  debugPrint('🔍 Searching medicines for: $query');
+  final db = ref.read(databaseProvider);
+  try {
+    final results = await db.searchMedicines(query);
+    debugPrint('✅ Found ${results.length} results');
+    return results;
+  } catch (e) {
+    debugPrint('❌ Search error: $e');
+    return [];
+  }
+});
 }

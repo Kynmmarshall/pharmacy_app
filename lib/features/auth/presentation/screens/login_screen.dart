@@ -32,39 +32,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
+  // In login_screen.dart, update _login method:
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       
       try {
-        final authProvider = ref.read(authProviderNotifier.notifier);
-        await authProvider.login(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
+        await ref.read(authProvider.notifier).login(
+          _emailController.text.trim(),
+          _passwordController.text,
         );
         
-        // Navigate to home screen on success
-         context.go('/home');
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login successful!'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        // Navigate to home on success
+        if (context.mounted) {
+          context.go('/home');
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login failed: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.toString()),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } finally {
-        setState(() => _isLoading = false);
+        if (context.mounted) {
+          setState(() => _isLoading = false);
+        }
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

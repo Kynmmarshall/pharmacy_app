@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/core/themes/app_theme.dart';
 import 'package:pharmacy_app/core/widgets/custom_button.dart';
 import 'package:pharmacy_app/core/widgets/custom_textfield.dart';
+import 'package:pharmacy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pharmacy_app/features/auth/presentation/screens/login_screen.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -35,6 +37,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
+  // In register_screen.dart, update _register method:
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       if (!_acceptTerms) {
@@ -59,21 +62,32 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
       setState(() => _isLoading = true);
       
-      await Future.delayed(const Duration(seconds: 2)); // Mock API call
-      
-      setState(() => _isLoading = false);
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Registration successful!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      try {
+        await ref.read(authProvider.notifier).register(
+          _fullNameController.text.trim(),
+          _emailController.text.trim(),
+          _phoneController.text.trim(),
+          _passwordController.text,
+        );
+        
+        // Navigate to home on success
+        if (context.mounted) {
+          context.go('/home');
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.toString()),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } finally {
+        if (context.mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
     }
   }
 

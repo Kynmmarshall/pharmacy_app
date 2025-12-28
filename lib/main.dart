@@ -7,6 +7,7 @@ import 'package:pharmacy_app/features/auth/presentation/screens/login_screen.dar
 import 'package:pharmacy_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:pharmacy_app/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:pharmacy_app/features/home/presentation/screens/home_screen.dart';
+import 'package:pharmacy_app/features/search/presentation/screens/search_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,10 @@ final GoRouter _router = GoRouter(
       path: '/forgot-password',
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
+    GoRoute(
+    path: '/search',
+    builder: (context, state) => const SearchScreen(),
+  ),
   ],
 );
 

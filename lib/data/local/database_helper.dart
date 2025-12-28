@@ -1,4 +1,6 @@
 // lib/data/local/database_helper.dart
+import 'package:flutter/foundation.dart';
+import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -75,33 +77,6 @@ class DatabaseHelper {
     await _insertSampleData(db);
   }
 
-  Future<void> _insertSampleData(Database db) async {
-    // Sample medicines
-    await db.insert('medicines', {
-      'name': 'Paracetamol',
-      'description': 'Pain reliever',
-      'price': 120.0,
-      'category': 'Pain Relief',
-      'requires_prescription': 0,
-    });
-    
-    await db.insert('medicines', {
-      'name': 'Vitamin C',
-      'description': 'Immune booster',
-      'price': 250.0,
-      'category': 'Vitamins',
-      'requires_prescription': 0,
-    });
-    
-    await db.insert('medicines', {
-      'name': 'Amoxicillin',
-      'description': 'Antibiotic',
-      'price': 180.0,
-      'category': 'Antibiotics',
-      'requires_prescription': 1,
-    });
-  }
-
   // User methods
   Future<int> insertUser(Map<String, dynamic> user) async {
     final db = await database;
@@ -117,21 +92,6 @@ class DatabaseHelper {
       limit: 1,
     );
     return result.isNotEmpty ? result.first : null;
-  }
-
-  // Medicine methods
-  Future<List<Map<String, dynamic>>> getMedicines() async {
-    final db = await database;
-    return await db.query('medicines');
-  }
-
-  Future<List<Map<String, dynamic>>> searchMedicines(String query) async {
-    final db = await database;
-    return await db.query(
-      'medicines',
-      where: 'name LIKE ?',
-      whereArgs: ['%$query%'],
-    );
   }
 
   // Cart methods
@@ -173,4 +133,233 @@ class DatabaseHelper {
     final db = await database;
     await db.close();
   }
+
+  // Add to DatabaseHelper class
+Future<int> registerUser(String name, String email, String phone, String password) async {
+  final db = await database;
+  
+  // Check if user exists
+  final existing = await db.query(
+    'users',
+    where: 'email = ?',
+    whereArgs: [email],
+  );
+  
+  if (existing.isNotEmpty) {
+    throw Exception('User already exists');
+  }
+  
+  // Insert new user
+  return await db.insert('users', {
+    'name': name,
+    'email': email,
+    'phone': phone,
+    'password': password, // In production, hash this!
+  });
+}
+
+Future<Map<String, dynamic>?> loginUser(String email, String password) async {
+  final db = await database;
+  
+  final result = await db.query(
+    'users',
+    where: 'email = ? AND password = ?',
+    whereArgs: [email, password],
+    limit: 1,
+  );
+  
+  if (result.isEmpty) {
+    return null;
+  }
+  
+  return result.first;
+}
+
+Future<void> updateUser(int userId, Map<String, dynamic> updates) async {
+  final db = await database;
+  await db.update(
+    'users',
+    updates,
+    where: 'id = ?',
+    whereArgs: [userId],
+  );
+}
+
+Future<void> deleteUser(int userId) async {
+  final db = await database;
+  await db.delete(
+    'users',
+    where: 'id = ?',
+    whereArgs: [userId],
+  );
+}
+
+// In database_helper.dart, update _insertSampleData method:
+Future<void> _insertSampleData(Database db) async {
+  debugPrint('📦 Inserting sample medicine data...');
+  
+  final medicines = [
+    {
+      'name': 'Paracetamol 500mg',
+      'description': 'For headache and fever relief',
+      'price': 120.0,
+      'category': 'Pain Relief',
+      'requires_prescription': 0,
+      'image_url': 'assets/paracetamol.png',
+      'stock': 50,
+    },
+    {
+      'name': 'Vitamin C 1000mg',
+      'description': 'Immune system booster',
+      'price': 250.0,
+      'category': 'Vitamins',
+      'requires_prescription': 0,
+      'image_url': 'assets/vitamin_c.png',
+      'stock': 30,
+    },
+    {
+      'name': 'Amoxicillin 500mg',
+      'description': 'Antibiotic for bacterial infections',
+      'price': 180.0,
+      'category': 'Antibiotics',
+      'requires_prescription': 1,
+      'image_url': 'assets/amoxicillin.png',
+      'stock': 20,
+    },
+    {
+      'name': 'Cetirizine 10mg',
+      'description': 'Anti-allergy tablets',
+      'price': 85.0,
+      'category': 'Allergy',
+      'requires_prescription': 0,
+      'image_url': 'assets/cetirizine.png',
+      'stock': 40,
+    },
+    {
+      'name': 'Omeprazole 20mg',
+      'description': 'Acid reflux medicine',
+      'price': 150.0,
+      'category': 'Gastrointestinal',
+      'requires_prescription': 0,
+      'image_url': 'assets/omeprazole.png',
+      'stock': 25,
+    },
+    {
+      'name': 'Metformin 500mg',
+      'description': 'Diabetes medication',
+      'price': 200.0,
+      'category': 'Diabetes',
+      'requires_prescription': 1,
+      'image_url': 'assets/metformin.png',
+      'stock': 15,
+    },
+    {
+      'name': 'Aspirin 75mg',
+      'description': 'Blood thinner and pain relief',
+      'price': 95.0,
+      'category': 'Cardiac',
+      'requires_prescription': 0,
+      'image_url': 'assets/aspirin.png',
+      'stock': 35,
+    },
+    {
+      'name': 'Ibuprofen 400mg',
+      'description': 'Anti-inflammatory painkiller',
+      'price': 110.0,
+      'category': 'Pain Relief',
+      'requires_prescription': 0,
+      'image_url': 'assets/ibuprofen.png',
+      'stock': 45,
+    },
+    {
+      'name': 'Multivitamin Tablets',
+      'description': 'Daily essential vitamins',
+      'price': 300.0,
+      'category': 'Vitamins',
+      'requires_prescription': 0,
+      'image_url': 'assets/multivitamin.png',
+      'stock': 60,
+    },
+    {
+      'name': 'Diazepam 5mg',
+      'description': 'For anxiety and muscle spasms',
+      'price': 350.0,
+      'category': 'Neuro',
+      'requires_prescription': 1,
+      'image_url': 'assets/diazepam.png',
+      'stock': 10,
+    },
+  ];
+  
+  for (final medicine in medicines) {
+    try {
+      await db.insert('medicines', medicine);
+      debugPrint('✅ Added: ${medicine['name']}');
+    } catch (e) {
+      debugPrint('❌ Error adding ${medicine['name']}: $e');
+    }
+  }
+  
+  debugPrint('📦 Total medicines inserted: ${medicines.length}');
+}
+
+// Add to DatabaseHelper class:
+Future<List<MedicineModel>> getAllMedicines() async {
+  debugPrint('🔄 Fetching all medicines from database');
+  final db = await database;
+  final List<Map<String, dynamic>> maps = await db.query('medicines');
+  debugPrint('📊 Found ${maps.length} medicines in database');
+  
+  return List.generate(maps.length, (i) {
+    return MedicineModel.fromMap(maps[i]);
+  });
+}
+
+Future<List<MedicineModel>> searchMedicines(String query) async {
+  debugPrint('🔍 Database search for: $query');
+  final db = await database;
+  final List<Map<String, dynamic>> maps = await db.query(
+    'medicines',
+    where: 'name LIKE ? OR description LIKE ? OR category LIKE ?',
+    whereArgs: ['%$query%', '%$query%', '%$query%'],
+  );
+  
+  debugPrint('📊 Found ${maps.length} results in database');
+  return List.generate(maps.length, (i) => MedicineModel.fromMap(maps[i]));
+}
+
+Future<List<MedicineModel>> getMedicinesByCategory(String category) async {
+  debugPrint('🏷️ Fetching medicines for category: $category');
+  final db = await database;
+  final List<Map<String, dynamic>> maps = await db.query(
+    'medicines',
+    where: 'category = ?',
+    whereArgs: [category],
+  );
+  debugPrint('🏷️ Category results: ${maps.length} medicines found');
+  
+  return List.generate(maps.length, (i) {
+    return MedicineModel.fromMap(maps[i]);
+  });
+}
+
+Future<MedicineModel?> getMedicineById(int id) async {
+  debugPrint('🔎 Fetching medicine by ID: $id');
+  final db = await database;
+  final List<Map<String, dynamic>> maps = await db.query(
+    'medicines',
+    where: 'id = ?',
+    whereArgs: [id],
+    limit: 1,
+  );
+  
+  if (maps.isEmpty) {
+    debugPrint('❌ No medicine found with ID: $id');
+    return null;
+  }
+  
+  debugPrint('✅ Found medicine: ${maps.first['name']}');
+  return MedicineModel.fromMap(maps.first);
+}
+
 }

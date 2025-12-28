@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PharmacySearchBar extends StatelessWidget {
   const PharmacySearchBar({super.key});
@@ -7,7 +8,7 @@ class PharmacySearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to search screen
+        context.go('/search');
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
