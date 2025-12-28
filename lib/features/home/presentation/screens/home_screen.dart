@@ -105,7 +105,7 @@ class HomeScreen extends ConsumerWidget {
                     name: 'Paracetamol',
                     company: 'ABC Pharma',
                     price: 120.0,
-                    imageUrl: 'assets/med1.png',
+                    imageUrl: 'assets/medecine/med1.jpg',
                   );
                 },
               ),

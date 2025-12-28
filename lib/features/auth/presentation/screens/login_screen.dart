@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/core/themes/app_theme.dart';
 import 'package:pharmacy_app/core/widgets/custom_button.dart';
 import 'package:pharmacy_app/core/widgets/custom_textfield.dart';
@@ -43,7 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
         
         // Navigate to home screen on success
-        // Navigator.pushReplacementNamed(context, '/home');
+         context.go('/home');
         
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -321,7 +322,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     TextButton(
                       onPressed: () {
                         // Continue as guest
-                        // Navigator.pushReplacementNamed(context, '/home');
+                         context.go('/home');
                       },
                       child: Text(
                         'Continue as Guest',
