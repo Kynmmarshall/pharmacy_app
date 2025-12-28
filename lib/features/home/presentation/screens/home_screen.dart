@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/data/providers/database_provider.dart';
 import 'package:pharmacy_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:pharmacy_app/features/home/presentation/widgets/medicine_card.dart';
@@ -7,11 +8,18 @@ import 'package:pharmacy_app/features/home/presentation/widgets/category_chip.da
 import 'package:pharmacy_app/features/home/presentation/widgets/search_bar.dart';
 import 'package:pharmacy_app/features/home/presentation/widgets/featured_section.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int _currentIndex = 0;
+ 
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final userName = authState.user?['name'] ?? 'Guest';
     final medicinesAsync = ref.watch(medicinesProvider);
@@ -126,11 +134,7 @@ class HomeScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final medicine = medicines[index];
                       return MedicineCard(
-                        name: medicine.name,
-                        description: medicine.description,
-                        price: medicine.price,
-                        category: medicine.category,
-                        requiresPrescription: medicine.requiresPrescription,
+                         medicine: medicine,
                       );
                     },
                   ),
@@ -141,8 +145,25 @@ class HomeScreen extends ConsumerWidget {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
+        currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+        setState(() => _currentIndex = index);
+        switch (index) {
+          case 0:
+            context.go('/home');
+            break;
+          case 1:
+            context.go('/search');
+            break;
+          case 2:
+            context.go('/consult');
+            break;
+          case 3:
+            context.go('/profile');
+            break;
+        }
+      },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -150,7 +171,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Search',
+            label: 'Search',   
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.medical_services_outlined),

@@ -43,4 +43,4 @@ flutter:
   assets:
     - assets/
     - assets/icons/
-    - assets/medecine/
+    - assets/medicines/

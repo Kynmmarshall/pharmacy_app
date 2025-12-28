@@ -48,6 +48,9 @@ class DatabaseHelper {
         description TEXT,
         price REAL,
         category TEXT,
+        stock INTEGER,
+        manufacturer TEXT,
+        image_url TEXT,
         requires_prescription INTEGER DEFAULT 0
       )
     ''');
@@ -205,7 +208,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 120.0,
       'category': 'Pain Relief',
       'requires_prescription': 0,
-      'image_url': 'assets/paracetamol.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 50,
     },
     {
@@ -214,7 +217,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 250.0,
       'category': 'Vitamins',
       'requires_prescription': 0,
-      'image_url': 'assets/vitamin_c.png',
+      'image_url': 'assets/medicines/vitamin c.jpg',
       'stock': 30,
     },
     {
@@ -223,7 +226,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 180.0,
       'category': 'Antibiotics',
       'requires_prescription': 1,
-      'image_url': 'assets/amoxicillin.png',
+      'image_url': 'assets/medicines/amoxicillin.jpg',
       'stock': 20,
     },
     {
@@ -232,7 +235,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 85.0,
       'category': 'Allergy',
       'requires_prescription': 0,
-      'image_url': 'assets/cetirizine.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 40,
     },
     {
@@ -241,7 +244,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 150.0,
       'category': 'Gastrointestinal',
       'requires_prescription': 0,
-      'image_url': 'assets/omeprazole.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 25,
     },
     {
@@ -250,7 +253,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 200.0,
       'category': 'Diabetes',
       'requires_prescription': 1,
-      'image_url': 'assets/metformin.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 15,
     },
     {
@@ -259,7 +262,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 95.0,
       'category': 'Cardiac',
       'requires_prescription': 0,
-      'image_url': 'assets/aspirin.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 35,
     },
     {
@@ -268,7 +271,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 110.0,
       'category': 'Pain Relief',
       'requires_prescription': 0,
-      'image_url': 'assets/ibuprofen.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 45,
     },
     {
@@ -277,7 +280,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 300.0,
       'category': 'Vitamins',
       'requires_prescription': 0,
-      'image_url': 'assets/multivitamin.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 60,
     },
     {
@@ -286,7 +289,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 350.0,
       'category': 'Neuro',
       'requires_prescription': 1,
-      'image_url': 'assets/diazepam.png',
+      'image_url': 'assets/medicines/paracetamol.jpg',
       'stock': 10,
     },
   ];

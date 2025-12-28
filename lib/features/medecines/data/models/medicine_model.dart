@@ -9,7 +9,7 @@ class MedicineModel {
   final double price;
   final String category;
   final bool requiresPrescription;
-  final String? imageUrl;
+  final String imageUrl;
   final int stock;
   final String manufacturer;
   final String dosage;
@@ -21,7 +21,7 @@ class MedicineModel {
     required this.price,
     required this.category,
     required this.requiresPrescription,
-    this.imageUrl,
+    required this.imageUrl ,
     required this.stock,
     this.manufacturer = '',
     this.dosage = '',
@@ -43,7 +43,7 @@ class MedicineModel {
                 : double.tryParse(map['price']?.toString() ?? '0') ?? 0.0,
         category: map['category']?.toString() ?? 'General',
         requiresPrescription: (map['requires_prescription'] ?? 0) == 1,
-        imageUrl: map['image_url']?.toString(),
+        imageUrl: map['image_url']?.toString() ?? 'assets/medicines/paracetamol.jpg',
         stock: map['stock']?.toInt() ?? 0,
         manufacturer: map['manufacturer']?.toString() ?? '',
         dosage: map['dosage']?.toString() ?? '',
@@ -67,14 +67,13 @@ class MedicineModel {
       'description': description,
       'price': price,
       'category': category,
+      'image_url': imageUrl,
       'requires_prescription': requiresPrescription ? 1 : 0,
       'stock': stock,
     };
     
-    if (imageUrl != null) {
-      map['image_url'] = imageUrl!; // Add ! to assert not null
-    }
-    if (manufacturer.isNotEmpty) {
+   // map['image_url'] = imageUrl; // Add ! to assert not null
+      if (manufacturer.isNotEmpty) {
       map['manufacturer'] = manufacturer;
     }
     if (dosage.isNotEmpty) {

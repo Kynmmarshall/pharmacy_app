@@ -304,7 +304,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             );
                           },
                           child: Text(
-                            'Sign In',
+                            'Log In',
                             style: TextStyle(
                               color: AppTheme.primaryColor,
                               fontWeight: FontWeight.bold,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/core/themes/app_theme.dart';
 import 'package:pharmacy_app/core/widgets/custom_button.dart';
@@ -218,7 +217,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     CustomButton(
                       onPressed: _isLoading ? null : _login,
                       isLoading: _isLoading,
-                      text: 'Sign In',
+                      text: 'Log In',
                       width: double.infinity,
                     ),
                     

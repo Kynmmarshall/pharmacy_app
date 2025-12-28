@@ -1,7 +1,6 @@
 // lib/features/medicines/presentation/providers/medicine_provider.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pharmacy_app/data/local/database_helper.dart';
 import 'package:pharmacy_app/data/providers/database_provider.dart';
 import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
 

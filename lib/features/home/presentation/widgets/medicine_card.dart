@@ -1,28 +1,20 @@
-// lib/features/medicines/presentation/widgets/medicine_card.dart
 import 'package:flutter/material.dart';
 import 'package:pharmacy_app/core/themes/app_theme.dart';
+import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
 
 class MedicineCard extends StatelessWidget {
-  final String name;
-  final String description;
-  final double price;
-  final String category;
-  final bool requiresPrescription;
+  final MedicineModel medicine;
   final VoidCallback? onAddToCart;
   
   const MedicineCard({
     super.key,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.category,
-    required this.requiresPrescription,
+    required this.medicine,
     this.onAddToCart,
   });
   
   @override
   Widget build(BuildContext context) {
-    debugPrint('💊 Building MedicineCard for: $name');
+    debugPrint('💊 Building MedicineCard for: ${medicine.name}');
     
     return Card(
       elevation: 2,
@@ -34,8 +26,7 @@ class MedicineCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Prescription badge
-            if (requiresPrescription)
+            if (medicine.requiresPrescription)
               Align(
                 alignment: Alignment.topRight,
                 child: Container(
@@ -63,27 +54,28 @@ class MedicineCard extends StatelessWidget {
                 ),
               ),
             
-            // Medicine image placeholder
             Container(
               height: 80,
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Center(
-                child: Icon(
-                  _getCategoryIcon(category),
-                  size: 40,
-                  color: AppTheme.primaryColor,
+              child: SizedBox(
+                child: Center(
+                  child: Image.asset(
+                       medicine.imageUrl ,
+                        width: 200,
+                        height: 200,
+                      )
+                  
                 ),
               ),
             ),
             
             const SizedBox(height: 8),
             
-            // Medicine name
             Text(
-              name,
+              medicine.name,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
@@ -92,9 +84,8 @@ class MedicineCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             
-            // Category
             Text(
-              category,
+              medicine.category,
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey[600],
@@ -103,9 +94,8 @@ class MedicineCard extends StatelessWidget {
             
             const SizedBox(height: 4),
             
-            // Description
             Text(
-              description,
+              medicine.description,
               style: TextStyle(
                 fontSize: 10,
                 color: Colors.grey[500],
@@ -116,12 +106,11 @@ class MedicineCard extends StatelessWidget {
             
             const Spacer(),
             
-            // Price and add button
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '₹${price.toStringAsFixed(2)}',
+                  '₹${medicine.price.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primaryColor,
