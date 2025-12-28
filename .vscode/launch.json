@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "pharmacy_app (Dart Web)",
+            "program": "web",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
