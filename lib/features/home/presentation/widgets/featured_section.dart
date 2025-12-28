@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:pharmacy_app/core/themes/app_theme.dart';
 
 class FeaturedSection extends StatelessWidget {
   FeaturedSection({super.key});
 
-  // Mock data for featured items (replace with API data later)
   final List<FeaturedItem> featuredItems = [
     FeaturedItem(
       title: 'Get 20% OFF on First Order',
@@ -46,7 +44,6 @@ class FeaturedSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Section Header
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -77,33 +74,21 @@ class FeaturedSection extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         
-        // Carousel Slider
-        CarouselSlider.builder(
-          options: CarouselOptions(
-            height: 180,
-            aspectRatio: 16 / 9,
-            viewportFraction: 0.95,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 5),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enlargeCenterPage: true,
-            enlargeFactor: 0.2,
-            scrollDirection: Axis.horizontal,
-            onPageChanged: (index, reason) {
-              // Handle page change if needed
+        SizedBox(
+          height: 180,
+          child: PageView.builder(
+            itemCount: featuredItems.length,
+            controller: PageController(viewportFraction: 0.8),
+            padEnds: false,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: FeaturedCard(item: featuredItems[index]),
+              );
             },
           ),
-          itemCount: featuredItems.length,
-          itemBuilder: (context, index, realIndex) {
-            return FeaturedCard(item: featuredItems[index]);
-          },
         ),
         
-        // Indicators
         const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +112,6 @@ class FeaturedSection extends StatelessWidget {
   }
 }
 
-// Featured Item Model
 class FeaturedItem {
   final String title;
   final String subtitle;
@@ -146,7 +130,6 @@ class FeaturedItem {
   });
 }
 
-// Featured Card Widget
 class FeaturedCard extends StatelessWidget {
   final FeaturedItem item;
 
@@ -158,7 +141,6 @@ class FeaturedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: item.backgroundColor,
         borderRadius: BorderRadius.circular(16),
@@ -172,7 +154,6 @@ class FeaturedCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Decorative elements
           Positioned(
             right: 16,
             top: 16,
@@ -199,12 +180,10 @@ class FeaturedCard extends StatelessWidget {
             ),
           ),
           
-          // Content
           Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
               children: [
-                // Text Content
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,7 +231,6 @@ class FeaturedCard extends StatelessWidget {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () {
-                          // Handle button press
                           _handleFeaturedAction(item.title, context);
                         },
                         style: ElevatedButton.styleFrom(
@@ -265,7 +243,6 @@ class FeaturedCard extends StatelessWidget {
                             horizontal: 24,
                             vertical: 10,
                           ),
-                          elevation: 0,
                         ),
                         child: Text(
                           item.buttonText,
@@ -278,8 +255,6 @@ class FeaturedCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                
-                // Image (Placeholder)
                 const SizedBox(width: 20),
                 Expanded(
                   child: Container(
@@ -287,13 +262,7 @@ class FeaturedCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white.withOpacity(0.5),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/medicine_placeholder.png'),
-                        fit: BoxFit.contain,
-                      ),
                     ),
-                    // Note: Replace with actual image when assets are added
-                    // For now using placeholder
                     child: Center(
                       child: Icon(
                         _getIconForType(item.title),
@@ -311,7 +280,6 @@ class FeaturedCard extends StatelessWidget {
     );
   }
 
-  // Helper method to get icons based on featured item type
   IconData _getIconForType(String title) {
     if (title.contains('OFF') || title.contains('Shop')) {
       return Icons.local_offer;
@@ -325,40 +293,22 @@ class FeaturedCard extends StatelessWidget {
     return Icons.star;
   }
 
-  // Handle featured item action
   void _handleFeaturedAction(String title, BuildContext context) {
-    // Navigation based on featured item type
     if (title.contains('OFF') || title.contains('Shop')) {
-      // Navigate to all products
-      // context.push('/products');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Navigating to products...'),
-        ),
+        const SnackBar(content: Text('Navigating to products...')),
       );
     } else if (title.contains('Delivery')) {
-      // Navigate to delivery info or cart
-      // context.push('/delivery-info');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Showing delivery information...'),
-        ),
+        const SnackBar(content: Text('Showing delivery information...')),
       );
     } else if (title.contains('Consultation')) {
-      // Navigate to consultation booking
-      // context.push('/consultation');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Opening consultation booking...'),
-        ),
+        const SnackBar(content: Text('Opening consultation booking...')),
       );
     } else if (title.contains('Prescription')) {
-      // Navigate to prescription upload
-      // context.push('/prescription-upload');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Opening prescription upload...'),
-        ),
+        const SnackBar(content: Text('Opening prescription upload...')),
       );
     }
   }

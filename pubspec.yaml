@@ -24,15 +24,12 @@ dependencies:
   flutter_riverpod: ^2.3.6
   
   # UI Components
-  flutter_screenutil: ^5.7.0
-  carousel_slider: ^4.2.1
+  flutter_screenutil: ^5.7.0  
   shimmer: ^3.0.0
   
   # Form & Validation
   flutter_form_builder: ^8.0.0
   image_picker: ^0.8.7+4
-  file_picker: ^5.3.3
-  flutter_svg: ^1.1.6
 
 dev_dependencies:
   flutter_test:
