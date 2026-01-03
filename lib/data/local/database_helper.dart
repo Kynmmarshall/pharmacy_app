@@ -46,7 +46,8 @@ class DatabaseHelper {
         name TEXT,
         email TEXT UNIQUE,
         phone TEXT,
-        password TEXT
+        password TEXT,
+        role TEXT DEFAULT 'user'
       )
     ''');
 
@@ -148,7 +149,7 @@ class DatabaseHelper {
   }
 
   // Add to DatabaseHelper class
-Future<int> registerUser(String name, String email, String phone, String password) async {
+Future<int> registerUser(String name, String email, String phone, String password, String role) async {
   final db = await database;
   
   // Check if user exists
@@ -168,6 +169,7 @@ Future<int> registerUser(String name, String email, String phone, String passwor
     'email': email,
     'phone': phone,
     'password': password, // In production, hash this!
+    'role': role,
   });
 }
 

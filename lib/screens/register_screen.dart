@@ -26,6 +26,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _isConfirmPasswordVisible = false;
   bool _isLoading = false;
   bool _acceptTerms = false;
+  String _selectedRole = 'user'; // Default role
 
   @override
   void dispose() {
@@ -37,7 +38,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
-  // In register_screen.dart, update _register method:
   Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       if (!_acceptTerms) {
@@ -68,11 +68,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           _emailController.text.trim(),
           _phoneController.text.trim(),
           _passwordController.text,
+          _selectedRole, // Pass role to registration
         );
         
-        // Navigate to home on success
+        // Navigate based on role
         if (context.mounted) {
-          context.go('/home');
+          if (_selectedRole == 'admin' || _selectedRole == 'pharmacy') {
+            context.go('/pharmacy-dashboard');
+          } else {
+            context.go('/home');
+          }
         }
       } catch (e) {
         if (context.mounted) {
@@ -124,6 +129,63 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    // User Role Selection
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Account Type',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: RadioListTile<String>(
+                                title: Text('User'),
+                                value: 'user',
+                                groupValue: _selectedRole,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedRole = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: RadioListTile<String>(
+                                title: Text('Pharmacy'),
+                                value: 'pharmacy',
+                                groupValue: _selectedRole,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedRole = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: RadioListTile<String>(
+                                title: Text('Admin'),
+                                value: 'admin',
+                                groupValue: _selectedRole,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedRole = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    
                     CustomTextField(
                       controller: _fullNameController,
                       labelText: 'Full Name',

@@ -31,7 +31,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  // In login_screen.dart, update _login method:
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
@@ -42,9 +41,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           _passwordController.text,
         );
         
-        // Navigate to home on success
+        // Get user role from auth state
+        final authState = ref.read(authProvider);
+        final userRole = authState.user?['role'] ?? 'user';
+        
+        // Navigate based on role
         if (context.mounted) {
-          context.go('/home');
+          if (userRole == 'admin' || userRole == 'pharmacy') {
+            context.go('/pharmacy-dashboard');
+          } else {
+            context.go('/home');
+          }
         }
       } catch (e) {
         if (context.mounted) {
@@ -62,6 +69,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +111,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               
               const SizedBox(height: 40),
+              
+              // Role Selection Notice
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppTheme.primaryColor.withOpacity(0.3)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info, color: AppTheme.primaryColor, size: 20),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Admin/Pharmacy users: Use your registered credentials',
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              const SizedBox(height: 20),
               
               // Login Form
               Form(
@@ -257,14 +292,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SocialLoginButton(
-                          iconPath: 'assets/icons/google.svg', // Add this asset
+                          iconPath: 'assets/icons/google.svg',
                           onPressed: () {
                             // Handle Google login
                           },
                         ),
                         const SizedBox(width: 20),
                         SocialLoginButton(
-                          iconPath: 'assets/icons/facebook.svg', // Add this asset
+                          iconPath: 'assets/icons/facebook.svg',
                           onPressed: () {
                             // Handle Facebook login
                           },
@@ -273,7 +308,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         SocialLoginButton(
                           icon: Icons.phone,
                           onPressed: () {
-                            // Handle phone login
                             _showPhoneLoginDialog();
                           },
                         ),
@@ -315,11 +349,46 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     
                     const SizedBox(height: 20),
                     
+                    // Role-Based Registration Links
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 10,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to pharmacy registration
+                            context.push('/register?role=pharmacy');
+                          },
+                          child: Text(
+                            'Register as Pharmacy',
+                            style: TextStyle(
+                              color: AppTheme.secondaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to admin registration (if allowed)
+                            _showAdminRegistrationDialog();
+                          },
+                          child: Text(
+                            'Admin Registration',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    const SizedBox(height: 10),
+                    
                     // Guest Login Option
                     TextButton(
                       onPressed: () {
-                        // Continue as guest
-                         context.go('/home');
+                        context.go('/home');
                       },
                       child: Text(
                         'Continue as Guest',
@@ -345,6 +414,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Phone Login'),
         content: const Text('Phone login feature will be added soon!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAdminRegistrationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Admin Registration'),
+        content: const Text(
+          'Admin registration requires special authorization. '
+          'Please contact system administrator for admin access.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
