@@ -2,7 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pharmacy_app/data/providers/database_provider.dart';
-import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
+import 'package:pharmacy_app/models/medicine_model.dart';
 
 final medicinesProvider = FutureProvider<List<MedicineModel>>((ref) async {
   debugPrint('🔄 medicinesProvider: Fetching medicines...');

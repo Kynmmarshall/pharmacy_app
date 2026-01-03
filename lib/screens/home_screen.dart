@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/data/providers/database_provider.dart';
-import 'package:pharmacy_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:pharmacy_app/features/home/presentation/widgets/medicine_card.dart';
-import 'package:pharmacy_app/features/home/presentation/widgets/category_chip.dart';
-import 'package:pharmacy_app/features/home/presentation/widgets/search_bar.dart';
-import 'package:pharmacy_app/features/home/presentation/widgets/featured_section.dart';
+import 'package:pharmacy_app/providers/auth_provider.dart';
+import 'package:pharmacy_app/widgets/medicine_card.dart';
+import 'package:pharmacy_app/widgets/category_chip.dart';
+import 'package:pharmacy_app/widgets/search_bar.dart';
+import 'package:pharmacy_app/widgets/featured_section.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

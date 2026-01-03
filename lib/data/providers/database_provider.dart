@@ -1,7 +1,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
+import 'package:pharmacy_app/models/medicine_model.dart';
 import '../local/database_helper.dart';
 
 final databaseProvider = Provider<DatabaseHelper>((ref) {

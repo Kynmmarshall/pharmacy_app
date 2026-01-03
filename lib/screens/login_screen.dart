@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pharmacy_app/core/themes/app_theme.dart';
-import 'package:pharmacy_app/core/widgets/custom_button.dart';
-import 'package:pharmacy_app/core/widgets/custom_textfield.dart';
-import 'package:pharmacy_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:pharmacy_app/features/auth/presentation/screens/forgot_password_screen.dart';
-import 'package:pharmacy_app/features/auth/presentation/screens/register_screen.dart';
-import 'package:pharmacy_app/features/auth/presentation/widgets/social_login_button.dart';
+import 'package:pharmacy_app/themes/app_theme.dart';
+import 'package:pharmacy_app/widgets/custom_button.dart';
+import 'package:pharmacy_app/widgets/custom_textfield.dart';
+import 'package:pharmacy_app/providers/auth_provider.dart';
+import 'package:pharmacy_app/screens/forgot_password_screen.dart';
+import 'package:pharmacy_app/screens/register_screen.dart';
+import 'package:pharmacy_app/widgets/social_login_button.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});

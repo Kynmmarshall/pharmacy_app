@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pharmacy_app/core/themes/app_theme.dart';
-import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
+import 'package:pharmacy_app/themes/app_theme.dart';
+import 'package:pharmacy_app/models/medicine_model.dart';
 
 class MedicineCard extends StatelessWidget {
   final MedicineModel medicine;
@@ -110,7 +110,7 @@ class MedicineCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '₹${medicine.price.toStringAsFixed(2)}',
+                  '${medicine.price.toStringAsFixed(0)} FCFA',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primaryColor,

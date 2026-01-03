@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pharmacy_app/core/themes/app_theme.dart';
+import 'package:pharmacy_app/themes/app_theme.dart';
 
 class FeaturedSection extends StatefulWidget {
   const FeaturedSection({super.key});

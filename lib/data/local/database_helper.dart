@@ -1,6 +1,6 @@
 // lib/data/local/database_helper.dart
 import 'package:flutter/foundation.dart';
-import 'package:pharmacy_app/features/medecines/data/models/medicine_model.dart';
+import 'package:pharmacy_app/models/medicine_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -18,15 +18,25 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
+  try {
     final path = await getDatabasesPath();
     final dbPath = join(path, 'pharmacy.db');
+    
+    debugPrint('📁 Database path: $dbPath');
     
     return await openDatabase(
       dbPath,
       version: 1,
       onCreate: _createTables,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
     );
+  } catch (e) {
+    debugPrint('❌ Database initialization error: $e');
+    rethrow;
   }
+}
 
   Future<void> _createTables(Database db, int version) async {
     // Users table
@@ -205,7 +215,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Paracetamol 500mg',
       'description': 'For headache and fever relief',
-      'price': 120.0,
+      'price': 2500,
       'category': 'Pain Relief',
       'requires_prescription': 0,
       'image_url': 'assets/medicines/paracetamol.jpg',
@@ -214,7 +224,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Vitamin C 1000mg',
       'description': 'Immune system booster',
-      'price': 250.0,
+      'price': 1000,
       'category': 'Vitamins',
       'requires_prescription': 0,
       'image_url': 'assets/medicines/vitamin c.jpg',
@@ -223,7 +233,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Amoxicillin 500mg',
       'description': 'Antibiotic for bacterial infections',
-      'price': 180.0,
+      'price': 1200,
       'category': 'Antibiotics',
       'requires_prescription': 1,
       'image_url': 'assets/medicines/amoxicillin.jpg',
@@ -232,7 +242,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Cetirizine 10mg',
       'description': 'Anti-allergy tablets',
-      'price': 85.0,
+      'price': 1500,
       'category': 'Allergy',
       'requires_prescription': 0,
       'image_url': 'assets/medicines/paracetamol.jpg',
@@ -241,7 +251,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Omeprazole 20mg',
       'description': 'Acid reflux medicine',
-      'price': 150.0,
+      'price': 4800,
       'category': 'Gastrointestinal',
       'requires_prescription': 0,
       'image_url': 'assets/medicines/paracetamol.jpg',
@@ -250,7 +260,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Metformin 500mg',
       'description': 'Diabetes medication',
-      'price': 200.0,
+      'price': 2000,
       'category': 'Diabetes',
       'requires_prescription': 1,
       'image_url': 'assets/medicines/paracetamol.jpg',
@@ -259,7 +269,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Aspirin 75mg',
       'description': 'Blood thinner and pain relief',
-      'price': 95.0,
+      'price': 2500,
       'category': 'Cardiac',
       'requires_prescription': 0,
       'image_url': 'assets/medicines/paracetamol.jpg',
@@ -268,7 +278,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Ibuprofen 400mg',
       'description': 'Anti-inflammatory painkiller',
-      'price': 110.0,
+      'price': 1500,
       'category': 'Pain Relief',
       'requires_prescription': 0,
       'image_url': 'assets/medicines/paracetamol.jpg',
@@ -277,7 +287,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Multivitamin Tablets',
       'description': 'Daily essential vitamins',
-      'price': 300.0,
+      'price': 1000,
       'category': 'Vitamins',
       'requires_prescription': 0,
       'image_url': 'assets/medicines/paracetamol.jpg',
@@ -286,7 +296,7 @@ Future<void> _insertSampleData(Database db) async {
     {
       'name': 'Diazepam 5mg',
       'description': 'For anxiety and muscle spasms',
-      'price': 350.0,
+      'price': 1000,
       'category': 'Neuro',
       'requires_prescription': 1,
       'image_url': 'assets/medicines/paracetamol.jpg',

@@ -114,12 +114,12 @@ class MedicineModel {
   
   @override
   String toString() {
-    return 'MedicineModel(id: $id, name: $name, price: ₹$price, category: $category, stock: $stock)';
+    return 'MedicineModel(id: $id, name: $name, price: $price F, category: $category, stock: $stock)';
   }
   
   // Helper methods
   String get formattedPrice {
-    return '₹${price.toStringAsFixed(2)}';
+    return '${price.toStringAsFixed(0)}F';
   }
   
   bool get isInStock {
