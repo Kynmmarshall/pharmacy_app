@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/screens/cart_screen.dart';
 import 'package:pharmacy_app/screens/consult_screen.dart';
 import 'package:pharmacy_app/screens/medecine_detail_screen.dart';
+import 'package:pharmacy_app/screens/pharmacy_dashboard_screen.dart';
 import 'package:pharmacy_app/screens/profile_screen.dart';
 import 'package:pharmacy_app/themes/app_theme.dart';
 import 'package:pharmacy_app/data/local/database_helper.dart';
@@ -73,6 +74,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/consult',
       builder: (context, state) => const ConsultScreen(),
+    ),
+    GoRoute(
+      path: '/pharmacy-dashboard',
+      builder: (context, state) => const PharmacyDashboard(),
     ),
   ],
 );
