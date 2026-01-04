@@ -21,7 +21,7 @@ class _FeaturedSectionState extends State<FeaturedSection> {
     ),
     FeaturedItem(
       title: 'Free Delivery',
-      subtitle: 'On orders above ₹499',
+      subtitle: 'On orders above 15000FCFA',
       backgroundColor: const Color(0xFFE8F5E9),
       textColor: const Color(0xFF2E7D32),
     ),

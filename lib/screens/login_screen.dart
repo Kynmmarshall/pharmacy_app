@@ -338,7 +338,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           child: Text(
                             'Sign Up',
                             style: TextStyle(
-                              color: AppTheme.primaryColor,
+                              color: AppTheme.secondaryColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -355,9 +355,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       spacing: 10,
                       children: [
                         TextButton(
-                          onPressed: () {
-                            // Navigate to pharmacy registration
-                            context.push('/register?role=pharmacy');
+                           onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterScreen(initialRole: 'pharmacy'),
+                              ),
+                            );
                           },
                           child: Text(
                             'Register as Pharmacy',
@@ -369,13 +373,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            // Navigate to admin registration (if allowed)
-                            _showAdminRegistrationDialog();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterScreen(initialRole: 'admin'),
+                              ),
+                            );
                           },
                           child: Text(
                             'Admin Registration',
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: AppTheme.secondaryColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -393,7 +401,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Text(
                         'Continue as Guest',
                         style: TextStyle(
-                          color: AppTheme.secondaryColor,
+                          color: AppTheme.primaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -424,22 +432,4 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _showAdminRegistrationDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Admin Registration'),
-        content: const Text(
-          'Admin registration requires special authorization. '
-          'Please contact system administrator for admin access.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
 }

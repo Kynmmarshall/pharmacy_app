@@ -8,8 +8,9 @@ import 'package:pharmacy_app/providers/auth_provider.dart';
 import 'package:pharmacy_app/screens/login_screen.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
-  const RegisterScreen({super.key});
-
+  final String? initialRole;
+  
+  const RegisterScreen({super.key, this.initialRole});
   @override
   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -27,6 +28,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _isLoading = false;
   bool _acceptTerms = false;
   String _selectedRole = 'user'; // Default role
+
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialRole != null) {
+      _selectedRole = widget.initialRole!;
+    }
+  }
 
   @override
   void dispose() {
@@ -142,43 +152,37 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Row(
+                        Column(
                           children: [
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: Text('User'),
-                                value: 'user',
-                                groupValue: _selectedRole,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedRole = value!;
-                                  });
-                                },
-                              ),
+                            RadioListTile<String>(
+                              title: Text('User'),
+                              value: 'user',
+                              groupValue: _selectedRole,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedRole = value!;
+                                });
+                              },
                             ),
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: Text('Pharmacy'),
-                                value: 'pharmacy',
-                                groupValue: _selectedRole,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedRole = value!;
-                                  });
-                                },
-                              ),
+                            RadioListTile<String>(
+                              title: Text('Pharmacy'),
+                              value: 'pharmacy',
+                              groupValue: _selectedRole,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedRole = value!;
+                                });
+                              },
                             ),
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: Text('Admin'),
-                                value: 'admin',
-                                groupValue: _selectedRole,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedRole = value!;
-                                  });
-                                },
-                              ),
+                            RadioListTile<String>(
+                              title: Text('Admin'),
+                              value: 'admin',
+                              groupValue: _selectedRole,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedRole = value!;
+                                });
+                              },
                             ),
                           ],
                         ),

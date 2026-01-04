@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pharmacy_app/screens/profile_screen.dart';
 import 'package:pharmacy_app/themes/app_theme.dart';
 import 'package:pharmacy_app/data/local/database_helper.dart';
 import 'package:pharmacy_app/screens/login_screen.dart';
@@ -50,6 +51,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/search',
       builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
     ),
   ],
 );
