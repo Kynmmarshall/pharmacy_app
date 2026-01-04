@@ -110,7 +110,7 @@ class _PharmacyDashboardState extends ConsumerState<PharmacyDashboard> {
           title: const Text('Access Denied'),
           leading: IconButton(
             icon: const Icon(Icons.logout_sharp),
-            onPressed: () => context.go('/login'),
+            onPressed: () => context.go('/'),
           ),
         ),
         body: Center(
@@ -149,7 +149,7 @@ class _PharmacyDashboardState extends ConsumerState<PharmacyDashboard> {
         title: Text('$pharmacyName Dashboard'),
         leading: IconButton(
           icon: const Icon(Icons.logout_outlined),
-          onPressed: () => context.go('/login'),
+          onPressed: () => context.go('/'),
         ),
         actions: [
           IconButton(

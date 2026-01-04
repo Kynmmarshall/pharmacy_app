@@ -49,7 +49,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> {
           title: const Text('Access Denied'),
           leading: IconButton(
             icon: const Icon(Icons.logout_sharp),
-            onPressed: () => context.go('/login'),
+            onPressed: () => context.go('/'),
           ),
         ),
         body: Center(
@@ -88,7 +88,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> {
         title: Text('Admin Dashboard'),
         leading: IconButton(
           icon: const Icon(Icons.login_sharp),
-          onPressed: () => context.go('/login'),
+          onPressed: () => context.go('/'),
         ),
         actions: [
           IconButton(
