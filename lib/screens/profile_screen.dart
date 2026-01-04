@@ -82,7 +82,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         title: const Text('My Profile'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/home'),
+          onPressed: () {
+            if (userRole == 'pharmacy') {
+              context.go('/pharmacy-dashboard');
+            } else if (userRole == 'admin') {
+              context.go('/admin-dashboard');
+            } else {
+              context.go('/home');
+            }
+          },
         ),
         actions: [
           IconButton(

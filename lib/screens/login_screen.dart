@@ -47,9 +47,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         
         // Navigate based on role
         if (context.mounted) {
-          if (userRole == 'admin' || userRole == 'pharmacy') {
+          if (userRole == 'pharmacy') {
             context.go('/pharmacy-dashboard');
-          } else {
+          } 
+          else if (userRole == 'admin') {
+            context.go('/admin-dashboard');
+          }
+          else {
             context.go('/home');
           }
         }

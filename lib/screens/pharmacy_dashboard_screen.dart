@@ -109,8 +109,8 @@ class _PharmacyDashboardState extends ConsumerState<PharmacyDashboard> {
         appBar: AppBar(
           title: const Text('Access Denied'),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.go('/pharmacy-dashboard'),
+            icon: const Icon(Icons.logout_sharp),
+            onPressed: () => context.go('/login'),
           ),
         ),
         body: Center(
@@ -148,10 +148,15 @@ class _PharmacyDashboardState extends ConsumerState<PharmacyDashboard> {
       appBar: AppBar(
         title: Text('$pharmacyName Dashboard'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/pharmacy-dashboard'),
+          icon: const Icon(Icons.logout_outlined),
+          onPressed: () => context.go('/login'),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () => context.go('/profile'),
+            tooltip: 'Profile',
+          ),
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: _showNotifications,

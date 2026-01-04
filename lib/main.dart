@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pharmacy_app/screens/admin_dashboard_screen.dart';
 import 'package:pharmacy_app/screens/cart_screen.dart';
 import 'package:pharmacy_app/screens/consult_screen.dart';
 import 'package:pharmacy_app/screens/medecine_detail_screen.dart';
@@ -78,6 +79,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/pharmacy-dashboard',
       builder: (context, state) => const PharmacyDashboard(),
+    ),
+    GoRoute(
+      path: '/admin-dashboard',
+      builder: (context, state) => const AdminDashboard(),
     ),
   ],
 );

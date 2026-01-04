@@ -83,9 +83,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         
         // Navigate based on role
         if (context.mounted) {
-          if (_selectedRole == 'admin' || _selectedRole == 'pharmacy') {
+          if (_selectedRole == 'pharmacy') {
             context.go('/pharmacy-dashboard');
-          } else {
+          }
+          else if (_selectedRole == 'admin') {
+            context.go('/admin-dashboard');
+          } 
+          else {
             context.go('/home');
           }
         }
