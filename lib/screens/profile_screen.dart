@@ -205,17 +205,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     _buildActionButton(
                       Icons.shopping_bag,
                       'My Orders',
-                      () => context.go('/orders'),
-                    ),
-                    _buildActionButton(
-                      Icons.favorite,
-                      'Favorites',
-                      () => context.go('/favorites'),
-                    ),
-                    _buildActionButton(
-                      Icons.location_on,
-                      'Address Book',
-                      () => context.go('/addresses'),
+                      () => context.go('/cart'),
                     ),
                   ],
                 ),

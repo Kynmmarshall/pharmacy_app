@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/screens/cart_screen.dart';
+import 'package:pharmacy_app/screens/consult_screen.dart';
 import 'package:pharmacy_app/screens/medecine_detail_screen.dart';
 import 'package:pharmacy_app/screens/profile_screen.dart';
 import 'package:pharmacy_app/themes/app_theme.dart';
@@ -68,6 +69,10 @@ final GoRouter _router = GoRouter(
         final id = int.tryParse(state.pathParameters['id'] ?? '0') ?? 0;
         return MedicineDetailScreen(medicineId: id);
       },
+    ),
+    GoRoute(
+      path: '/consult',
+      builder: (context, state) => const ConsultScreen(),
     ),
   ],
 );
