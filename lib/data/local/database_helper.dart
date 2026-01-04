@@ -70,8 +70,9 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE cart(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
         medicine_id INTEGER,
-        quantity INTEGER,
+        quantity INTEGER DEFAULT 1,
         added_at TEXT
       )
     ''');
@@ -109,23 +110,91 @@ class DatabaseHelper {
   }
 
   // Cart methods
-  Future<int> addToCart(int medicineId, int quantity) async {
+  Future<int> addToCart(int userId, int medicineId, int quantity) async {
     final db = await database;
-    return await db.insert('cart', {
-      'medicine_id': medicineId,
-      'quantity': quantity,
-      'added_at': DateTime.now().toIso8601String(),
-    });
+    
+    // Check if item already in cart
+    final existing = await db.query(
+      'cart',
+      where: 'user_id = ? AND medicine_id = ?',
+      whereArgs: [userId, medicineId],
+    );
+    
+    if (existing.isNotEmpty) {
+      // Update quantity if exists
+      final currentQty = existing.first['quantity'] as int;
+      return await db.update(
+        'cart',
+        {'quantity': currentQty + quantity},
+        where: 'id = ?',
+        whereArgs: [existing.first['id']],
+      );
+    } else {
+      // Insert new item
+      return await db.insert('cart', {
+        'user_id': userId,
+        'medicine_id': medicineId,
+        'quantity': quantity,
+        'added_at': DateTime.now().toIso8601String(),
+      });
+    }
   }
 
-  Future<List<Map<String, dynamic>>> getCartItems() async {
+  // Get cart items for specific user
+  Future<List<Map<String, dynamic>>> getCartItems(int userId) async {
     final db = await database;
     return await db.rawQuery('''
-      SELECT cart.*, medicines.name, medicines.price 
+      SELECT cart.*, medicines.name, medicines.price, medicines.image_url, medicines.stock
       FROM cart 
       JOIN medicines ON cart.medicine_id = medicines.id
-    ''');
+      WHERE cart.user_id = ?
+      ORDER BY cart.added_at DESC
+    ''', [userId]);
   }
+
+  // Remove from cart
+Future<int> removeFromCart(int cartId) async {
+  final db = await database;
+  return await db.delete(
+    'cart',
+    where: 'id = ?',
+    whereArgs: [cartId],
+  );
+}
+
+// Update cart quantity
+Future<int> updateCartQuantity(int cartId, int quantity) async {
+  final db = await database;
+  return await db.update(
+    'cart',
+    {'quantity': quantity},
+    where: 'id = ?',
+    whereArgs: [cartId],
+  );
+}
+
+// Clear user's cart
+Future<void> clearUserCart(int userId) async {
+  final db = await database;
+  await db.delete(
+    'cart',
+    where: 'user_id = ?',
+    whereArgs: [userId],
+  );
+}
+
+// Get cart total
+Future<double> getCartTotal(int userId) async {
+  final db = await database;
+  final result = await db.rawQuery('''
+    SELECT SUM(medicines.price * cart.quantity) as total
+    FROM cart 
+    JOIN medicines ON cart.medicine_id = medicines.id
+    WHERE cart.user_id = ?
+  ''', [userId]);
+  
+  return result.first['total'] as double? ?? 0.0;
+}
 
   // Order methods
   Future<int> createOrder(List<Map<String, dynamic>> items, double total) async {
@@ -247,7 +316,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 1500,
       'category': 'Allergy',
       'requires_prescription': 0,
-      'image_url': 'assets/medicines/paracetamol.jpg',
+      'image_url': 'assets/medicines/cetrizine.jpg',
       'stock': 40,
     },
     {
@@ -256,7 +325,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 4800,
       'category': 'Gastrointestinal',
       'requires_prescription': 0,
-      'image_url': 'assets/medicines/paracetamol.jpg',
+      'image_url': 'assets/medicines/omeprazole.jpg',
       'stock': 25,
     },
     {
@@ -265,7 +334,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 2000,
       'category': 'Diabetes',
       'requires_prescription': 1,
-      'image_url': 'assets/medicines/paracetamol.jpg',
+      'image_url': 'assets/medicines/metformin.jpg',
       'stock': 15,
     },
     {
@@ -274,7 +343,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 2500,
       'category': 'Cardiac',
       'requires_prescription': 0,
-      'image_url': 'assets/medicines/paracetamol.jpg',
+      'image_url': 'assets/medicines/aspirin.jpg',
       'stock': 35,
     },
     {
@@ -283,7 +352,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 1500,
       'category': 'Pain Relief',
       'requires_prescription': 0,
-      'image_url': 'assets/medicines/paracetamol.jpg',
+      'image_url': 'assets/medicines/ibuprofen.jpg',
       'stock': 45,
     },
     {
@@ -292,7 +361,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 1000,
       'category': 'Vitamins',
       'requires_prescription': 0,
-      'image_url': 'assets/medicines/paracetamol.jpg',
+      'image_url': 'assets/medicines/multivitamin.jpg',
       'stock': 60,
     },
     {
@@ -301,7 +370,7 @@ Future<void> _insertSampleData(Database db) async {
       'price': 1000,
       'category': 'Neuro',
       'requires_prescription': 1,
-      'image_url': 'assets/medicines/paracetamol.jpg',
+      'image_url': 'assets/medicines/diazepam.jpg',
       'stock': 10,
     },
   ];

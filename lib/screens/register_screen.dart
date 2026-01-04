@@ -192,8 +192,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     
                     CustomTextField(
                       controller: _fullNameController,
-                      labelText: 'Full Name',
-                      hintText: 'Enter your full name',
+                      labelText: 'User Name',
+                      hintText: 'Enter your username',
                       prefixIcon: Icons.person_outline,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
