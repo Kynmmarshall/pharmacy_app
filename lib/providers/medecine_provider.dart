@@ -17,6 +17,20 @@ final medicinesProvider = FutureProvider<List<MedicineModel>>((ref) async {
   }
 });
 
+// Add this provider to your medicine_provider.dart
+final getMedicineByIdProvider = FutureProvider.family<MedicineModel?, int>((ref, id) async {
+  debugPrint('🔎 getMedicineByIdProvider: Fetching medicine ID $id');
+  final db = ref.read(databaseProvider);
+  try {
+    final medicine = await db.getMedicineById(id);
+    debugPrint('✅ getMedicineByIdProvider: Found ${medicine?.name}');
+    return medicine;
+  } catch (e) {
+    debugPrint('❌ getMedicineByIdProvider: Error: $e');
+    rethrow;
+  }
+});
+
 final searchMedicinesProvider = FutureProvider.family<List<MedicineModel>, String>((ref, query) async {
   debugPrint('🔍 searchMedicinesProvider: Searching for "$query"');
   final db = ref.read(databaseProvider);

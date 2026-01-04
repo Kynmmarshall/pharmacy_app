@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pharmacy_app/screens/cart_screen.dart';
+import 'package:pharmacy_app/screens/medecine_detail_screen.dart';
 import 'package:pharmacy_app/screens/profile_screen.dart';
 import 'package:pharmacy_app/themes/app_theme.dart';
 import 'package:pharmacy_app/data/local/database_helper.dart';
@@ -55,6 +57,17 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/profile',
       builder: (context, state) => const ProfileScreen(),
+    ),
+    GoRoute(
+      path: '/cart',
+      builder: (context, state) => const CartScreen(),
+    ),
+    GoRoute(
+      path: '/medicine/:id',
+      builder: (context, state) {
+        final id = int.tryParse(state.pathParameters['id'] ?? '0') ?? 0;
+        return MedicineDetailScreen(medicineId: id);
+      },
     ),
   ],
 );

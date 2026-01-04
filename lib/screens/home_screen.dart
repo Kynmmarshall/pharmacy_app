@@ -41,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () {},
+            onPressed: () => context.go('/cart'),
           ),
         ],
       ),
@@ -133,8 +133,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     itemCount: medicines.length,
                     itemBuilder: (context, index) {
                       final medicine = medicines[index];
-                      return MedicineCard(
-                         medicine: medicine,
+                      return GestureDetector(
+                        onTap: () => context.go('/medicine/${medicine.id}'),
+                        child: MedicineCard(medicine: medicine),
                       );
                     },
                   ),

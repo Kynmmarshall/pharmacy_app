@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pharmacy_app/themes/app_theme.dart';
 import 'package:pharmacy_app/models/medicine_model.dart';
+import 'package:pharmacy_app/data/providers/database_provider.dart';
+import 'package:pharmacy_app/providers/auth_provider.dart';
 
-class MedicineCard extends StatelessWidget {
+class MedicineCard extends ConsumerWidget {
   final MedicineModel medicine;
   final VoidCallback? onAddToCart;
   
@@ -13,10 +17,13 @@ class MedicineCard extends StatelessWidget {
   });
   
   @override
-  Widget build(BuildContext context) {
-    debugPrint('💊 Building MedicineCard for: ${medicine.name}');
-    
-    return Card(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final cartNotifier = ref.read(cartProvider.notifier);
+
+    return GestureDetector( 
+     onTap: () => context.go('/medicine/${medicine.id}'),
+    child: Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -60,15 +67,12 @@ class MedicineCard extends StatelessWidget {
                 color: AppTheme.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: SizedBox(
-                child: Center(
-                  child: Image.asset(
-                       medicine.imageUrl ,
-                        width: 200,
-                        height: 200,
-                      )
-                  
-                ),
+              child: Center(
+                child: Image.asset(
+                  medicine.imageUrl,
+                  width: 200,
+                  height: 200,
+                )
               ),
             ),
             
@@ -110,7 +114,7 @@ class MedicineCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${medicine.price.toStringAsFixed(0)} FCFA',
+                  '${medicine.price.toStringAsFixed(0)} Fcfa',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppTheme.primaryColor,
@@ -118,7 +122,39 @@ class MedicineCard extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: onAddToCart,
+                  onPressed: () async {
+                    if (!authState.isAuthenticated) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please login to add to cart'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+                    
+                    try {
+                      await cartNotifier.addItem(medicine.id, 1);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Added ${medicine.name} to cart'),
+                          backgroundColor: Colors.green,
+                          action: SnackBarAction(
+                          label: 'View Cart',
+                          textColor: Colors.white,
+                          onPressed: () => context.go('/cart'),
+                        ),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString()),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
                   icon: Icon(
                     Icons.add_circle,
                     color: AppTheme.primaryColor,
@@ -129,6 +165,7 @@ class MedicineCard extends StatelessWidget {
           ],
         ),
       ),
+    )
     );
   }
   

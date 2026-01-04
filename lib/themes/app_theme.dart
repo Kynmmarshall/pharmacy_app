@@ -12,24 +12,24 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     primaryColor: primaryColor,
     scaffoldBackgroundColor: backgroundColor,
-    fontFamily: GoogleFonts.poppins().fontFamily,
+    //fontFamily: GoogleFonts.poppins().fontFamily, // Remove .fontFamily and use directly
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.white,
       elevation: 0,
-      iconTheme: IconThemeData(color: textColor),
-      titleTextStyle: GoogleFonts.poppins(
+      iconTheme: const IconThemeData(color: textColor),
+      titleTextStyle: GoogleFonts.poppins( // Use GoogleFonts directly
         color: textColor,
         fontSize: 20,
         fontWeight: FontWeight.w600,
       ),
     ),
     textTheme: TextTheme(
-      headlineLarge: GoogleFonts.poppins(
+      headlineLarge: GoogleFonts.poppins( // Use GoogleFonts directly
         fontSize: 32,
         fontWeight: FontWeight.bold,
         color: textColor,
       ),
-      bodyLarge: GoogleFonts.poppins(
+      bodyLarge: GoogleFonts.poppins( // Use GoogleFonts directly
         fontSize: 16,
         color: textColor.withOpacity(0.8),
       ),
