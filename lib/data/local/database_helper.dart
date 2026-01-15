@@ -1,6 +1,10 @@
 // lib/data/local/database_helper.dart
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pharmacy_app/models/medicine_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -10,6 +14,7 @@ class DatabaseHelper {
   DatabaseHelper._internal();
 
   static Database? _database;
+  bool _isFirstRun = false;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -19,18 +24,38 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
   try {
+    final prefs = await SharedPreferences.getInstance();
     final path = await getDatabasesPath();
+
+    // Check if this is first run after install
+    final isFirstRun = prefs.getBool('first_run') ?? true;
+    _isFirstRun = isFirstRun;
+
+    if (isFirstRun) {
+      debugPrint('🆕 First run detected - Creating fresh database');
+      
+      // Delete all existing pharmacy databases
+      await _deleteAllDatabases(path);
+      
+      // Mark as not first run anymore
+      await prefs.setBool('first_run', false);
+      
+      // Store install version
+      final packageInfo = await PackageInfo.fromPlatform();
+      await prefs.setString('install_version', packageInfo.version);
+    }
+
     final dbPath = join(path, 'pharmacy.db');
-    
     debugPrint('📁 Database path: $dbPath');
     
     return await openDatabase(
       dbPath,
-      version: 4,
+      version: 6,
       onCreate: _createTables,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
       },
+      onUpgrade: _onUpgrade,
     );
   } catch (e) {
     debugPrint('❌ Database initialization error: $e');
@@ -90,6 +115,56 @@ class DatabaseHelper {
 
     // Insert sample data
     await _insertSampleData(db);
+  }
+
+  // Add migration function
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    debugPrint('🔄 Migrating database from version $oldVersion to $newVersion');
+    
+    if (oldVersion < 5) {
+      // Add role column to users table
+      await db.execute('ALTER TABLE users ADD COLUMN role TEXT DEFAULT "user"');
+      debugPrint('✅ Added role column to users table');
+    }
+    
+  }
+
+   Future<void> _deleteAllDatabases(String path) async {
+    final dir = Directory(path);
+    
+    if (await dir.exists()) {
+      final entities = dir.listSync();
+      
+      for (var entity in entities) {
+        if (entity is File && 
+            (entity.path.endsWith('.db') || 
+             entity.path.endsWith('.db-shm') || 
+             entity.path.endsWith('.db-wal'))) {
+          try {
+            await entity.delete();
+            debugPrint('🗑️ Deleted: ${basename(entity.path)}');
+          } catch (e) {
+            debugPrint('❌ Error deleting ${basename(entity.path)}: $e');
+          }
+        }
+      }
+    }
+  }
+  
+  // Reset database for testing
+  Future<void> resetDatabase() async {
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
+    
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('first_run', true);
+    
+    final path = await getDatabasesPath();
+    await _deleteAllDatabases(path);
+    
+    debugPrint('🔄 Database reset complete');
   }
 
   // User methods
